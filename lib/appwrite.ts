@@ -47,6 +47,7 @@ export const createUser = async ({email, password, name} : CreateUserPrams) => {
 
 export const signIn = async ({ email, password }: SignInParams) => {
     try {
+        const result = await account.deleteSessions()
         const session = await account.createEmailPasswordSession(email, password);
     } catch (e) {
         throw new Error(e as string);

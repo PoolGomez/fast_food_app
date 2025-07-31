@@ -25,7 +25,7 @@ const SignUp = () => {
         password,
         name
       })
-      Alert.alert('Success','User signed up successfully.');
+      // Alert.alert('Success','User signed up successfully.');
       router.replace('/');
 
     } catch (error: any) {
