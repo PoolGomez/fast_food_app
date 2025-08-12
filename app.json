@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "fast-food-app",
-    "slug": "fast-food-app",
+    "slug": "fast-food",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -16,7 +16,8 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "com.paul479.fastfood"
     },
     "web": {
       "bundler": "metro",
@@ -45,6 +46,13 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "499f036a-0aa1-4fc7-b363-2f659e39640f"
+      }
+    },
+    "owner": "paul479"
   }
 }

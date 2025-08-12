@@ -46,3 +46,5 @@ export default Sentry.wrap(function RootLayout() {
   
   return <Stack screenOptions={{headerShown: false}} />;
 });
+
+Sentry.showFeedbackWidget();
