@@ -1,12 +1,20 @@
-import { CreateUserPrams, SignInParams } from "@/type";
-import { Account, Avatars, Client, Databases, ID, Query } from "react-native-appwrite";
+import { CreateUserPrams, GetMenuParams, SignInParams } from "@/type";
+import { Account, Avatars, Client, Databases, ID, Query, Storage } from "react-native-appwrite";
 
 export const appwriteConfig = {
     endpoint: process.env.EXPO_PUBLIC_APPWRITE_ENDPOINT!,
     projectId: process.env.EXPO_PUBLIC_APPWRITE_PROJECT_ID!,
     platform: process.env.EXPO_PUBLIC_APPWRITE_PLATFORM!,
     databaseId: process.env.EXPO_PUBLIC_APPWRITE_DATABASE_ID!,
-    userCollectionId: process.env.EXPO_PUBLIC_APPWRITE_USERCOLLECTION_ID!
+
+    bucketId: process.env.EXPO_PUBLIC_APPWRITE_BUCKET_ID!,
+
+    userCollectionId: process.env.EXPO_PUBLIC_APPWRITE_USERCOLLECTION_ID!,
+    categoriesCollectionId: process.env.EXPO_PUBLIC_APPWRITE_CATEGORIESCOLLECTION_ID!,
+    menuCollectionId: process.env.EXPO_PUBLIC_APPWRITE_MENUCOLLECTION_ID!,
+    customizationsCollectionId: process.env.EXPO_PUBLIC_APPWRITE_CUSTOMIZATIONSCOLLECTION_ID!,
+    menuCustomizationsCollectionId: process.env.EXPO_PUBLIC_APPWRITE_MENUCUSTOMIZATIONSCOLLECTION_ID!,
+
 }
 
 export const client = new Client();
@@ -18,6 +26,7 @@ client
 
 export const account = new Account(client)
 export const databases = new Databases(client)
+export const storage = new Storage(client)
 const avatars = new Avatars(client)
 
 export const createUser = async ({email, password, name} : CreateUserPrams) => {
@@ -47,7 +56,7 @@ export const createUser = async ({email, password, name} : CreateUserPrams) => {
 
 export const signIn = async ({ email, password }: SignInParams) => {
     try {
-        const result = await account.deleteSessions()
+        await account.deleteSessions()
         const session = await account.createEmailPasswordSession(email, password);
     } catch (e) {
         throw new Error(e as string);
@@ -70,6 +79,38 @@ export const getCurrentUser = async () => {
         return currentUser.documents[0];
     } catch (e) {
         console.log(e);
+        throw new Error(e as string);
+    }
+}
+
+export const getMenu = async ({ category, query }: GetMenuParams) => {
+    try {
+        const queries: string[] = [];
+
+        if(category) queries.push(Query.equal('categories', category));
+        if(query) queries.push(Query.search('name', query));
+
+        const menus = await databases.listDocuments(
+            appwriteConfig.databaseId,
+            appwriteConfig.menuCollectionId,
+            queries,
+        )
+
+        return menus.documents;
+    } catch (e) {
+        throw new Error(e as string);
+    }
+}
+
+export const getCategories = async () => {
+    try {
+        const categories = await databases.listDocuments(
+            appwriteConfig.databaseId,
+            appwriteConfig.categoriesCollectionId,
+        )
+
+        return categories.documents;
+    } catch (e) {
         throw new Error(e as string);
     }
 }
